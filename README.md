@@ -14,7 +14,8 @@ you "swap" out your host operating system for one that you control.
 Getting software within a container to recognize and use GPU hardware on the 
 host can be tricky.  gpu4singularity simplifies this process by automating the 
 steps you must take to install GPU support within your container.  Then you can
-use programs that rely on CUDA and cuDNN.
+use programs that rely on [CUDA](https://developer.nvidia.com/cuda-zone) and 
+[cuDNN](https://developer.nvidia.com/cudnn).
 
 gpu4singularity does the following:
 
@@ -39,8 +40,9 @@ rm gpu4singularity
 ```
 
 Or you could put the same lines of code into a Singularity definition file. For
-instance, if you wanted to run [TensorFlow]() within a Singularity container
-with GPU support, you could start with a [NVIDIA CUDA/cuDNN Docker Hub image](), run gpu4singularity 
+instance, if you wanted to run [TensorFlow](https://www.tensorflow.org/) 
+within a Singularity container with GPU support, you could start with a 
+[NVIDIA CUDA/cuDNN Docker Hub image](https://hub.docker.com/r/nvidia/cuda/), run gpu4singularity 
 
 ```
 BootStrap: docker
