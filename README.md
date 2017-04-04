@@ -4,7 +4,7 @@
 - [Guidelines for Contributing](.github/CONTRIBUTING)
 - [Pull Request Template](.github/PULL_REQUEST_TEMPLATE)
 - [Singularity Home](http://singularity.lbl.gov/)
-- [Singularity on Biowulf](http://hpc.nih.gov/apps/singularity#gpu)
+- [Singularity on Biowulf](http://hpc.nih.gov/apps/singularity)
 
 ## About
 
