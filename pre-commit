@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# Edit this information to be truthful and current
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+REV="2.0.2"
+AUTH="David Godlove"                                                          
+EMAIL="godlovedc@helix.nih.gov"                                               
+AUTH_DATE='Fri Sep 23 17:22:25 EDT 2016'
+
+
+# Make sure to put these tags in the files you want annotated
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tag1='# ~~~~The following text is automatically generated. Do not edit manually.~~~~'
+tag2='# ~~~~~~~~~~~~~~~~~~~~~~~~ Do not edit above this line.~~~~~~~~~~~~~~~~~~~~~~~'
+
+COMMIT_AUTH=$(git var GIT_AUTHOR_IDENT | awk '{print $1,$2}')
+COMMIT_DATE=$(date)
+
+function _anotate_file {
+    file=$1
+    grep -B100000 "${tag1}" ${file} > tmp 
+    cat >> tmp <<END_OF_HEADER
+# ============================================================================
+#                                                                             
+#                            PUBLIC DOMAIN NOTICE                             
+#                     Center for Information Technology (CIT)                 
+#                                                                             
+#  This software/database is a "United States Government Work" under the      
+#  terms of the United States Copyright Act.  It was written as part of       
+#  the author's official duties as a United States Government employee and    
+#  thus cannot be copyrighted.  This software is freely available             
+#  to the public for use.  The Center for Information Technology and the U.S. 
+#  Government have not placed any restriction on its use or reproduction.     
+#                                                                             
+#  Although all reasonable efforts have been taken to ensure the accuracy     
+#  and reliability of the software and data, CIT and the U.S.                 
+#  Government do not and cannot warrant the performance or results that       
+#  may be obtained by using this software or data. CIT and the U.S.           
+#  Government disclaim all warranties, express or implied, including          
+#  warranties of performance, merchantability or fitness for any particular   
+#  purpose.                                                                   
+#                                                                             
+#  Please cite the author and the "NIH Biowulf Cluster" in any work or product
+#  based on this material.                                                    
+#                                                                             
+#  Author:    $AUTH                                                      
+#  Email:     $EMAIL                                            
+#  Date:      $AUTH_DATE                                       
+#                                                                            
+#  Last edit: $COMMIT_AUTH                                                           
+#  On Date:   $COMMIT_DATE                                                                   
+#  Revision:  $REV                                                           
+# ============================================================================
+                                                                              
+AUTH="$AUTH"
+EMAIL="$EMAIL"
+AUTH_DATE="$AUTH_DATE"
+COMMIT_AUTH="$COMMIT_AUTH"
+COMMIT_DATE="$COMMIT_DATE"
+REV="$REV"
+END_OF_HEADER
+    grep -A100000 "${tag2}" ${file} >> tmp 
+    mv tmp ${file}
+    chmod 755 ${file}
+}
+
+
+# List the files that should be anotated with this info
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+_anotate_file gpu4singularity
+

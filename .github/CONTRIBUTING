@@ -1,0 +1,13 @@
+# Contributing
+
+When contributing to this repository, please first discuss the change you wish 
+to make via issue. 
+
+For your convenience, a script called pre-commit is provided.  Please edit the
+script by incrementing the version number (micro for bug fixes, minor for new
+functionality, major for re-writes), and then run it to write all relevant 
+information into the gpu4singularity script.  
+
+If you're bored, try writing a hook that will determine the new git hash string
+when changes are pushed and write them into gpu4singularity using the pre-commit
+script. :-)
