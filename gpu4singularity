@@ -169,7 +169,6 @@ if [[ $? -ne 0 ]]; then
     exit 2
 fi
 # use eval with "$PARSED" to properly handle the quoting
-echo $PARSED
 eval set -- "$PARSED"
 
 # now enjoy the options in order and nicely split until we see --
