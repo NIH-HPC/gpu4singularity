@@ -77,7 +77,7 @@ function _usage {
         system and issue the following commands or include them in your .def
         file.
 
-        wget ${RDL}/gpu4singularity
+        wget ${FTP}/gpu4singularity
         chmod 755 gpu4singularity
         ./gpu4singularity <options>
         rm gpu4singularity
@@ -169,7 +169,6 @@ if [[ $? -ne 0 ]]; then
     exit 2
 fi
 # use eval with "$PARSED" to properly handle the quoting
-echo $PARSED
 eval set -- "$PARSED"
 
 # now enjoy the options in order and nicely split until we see --
