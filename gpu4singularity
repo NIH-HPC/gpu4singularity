@@ -1,43 +1,43 @@
 #!/bin/bash
 # ~~~~The following text is automatically generated. Do not edit manually.~~~~
 # ============================================================================
-#
-#                            PUBLIC DOMAIN NOTICE
-#                     Center for Information Technology (CIT)
-#
-#  This software/database is a "United States Government Work" under the
-#  terms of the United States Copyright Act.  It was written as part of
-#  the author's official duties as a United States Government employee and
-#  thus cannot be copyrighted.  This software is freely available
-#  to the public for use.  The Center for Information Technology and the U.S.
-#  Government have not placed any restriction on its use or reproduction.
-#
-#  Although all reasonable efforts have been taken to ensure the accuracy
-#  and reliability of the software and data, CIT and the U.S.
-#  Government do not and cannot warrant the performance or results that
-#  may be obtained by using this software or data. CIT and the U.S.
-#  Government disclaim all warranties, express or implied, including
-#  warranties of performance, merchantability or fitness for any particular
-#  purpose.
-#
+#                                                                             
+#                            PUBLIC DOMAIN NOTICE                             
+#                     Center for Information Technology (CIT)                 
+#                                                                             
+#  This software/database is a "United States Government Work" under the      
+#  terms of the United States Copyright Act.  It was written as part of       
+#  the author's official duties as a United States Government employee and    
+#  thus cannot be copyrighted.  This software is freely available             
+#  to the public for use.  The Center for Information Technology and the U.S. 
+#  Government have not placed any restriction on its use or reproduction.     
+#                                                                             
+#  Although all reasonable efforts have been taken to ensure the accuracy     
+#  and reliability of the software and data, CIT and the U.S.                 
+#  Government do not and cannot warrant the performance or results that       
+#  may be obtained by using this software or data. CIT and the U.S.           
+#  Government disclaim all warranties, express or implied, including          
+#  warranties of performance, merchantability or fitness for any particular   
+#  purpose.                                                                   
+#                                                                             
 #  Please cite the author and the "NIH Biowulf Cluster" in any work or product
-#  based on this material.
-#
-#  Written by: David Godlove
-#  Email:      godlovedc@helix.nih.gov
-#  Date:       Fri Sep 23 17:22:25 EDT 2016
-#
-#  Last edit:  Remy Dernat <remy.dernat@umontpellier.fr>
-#  On Date:    Wed Apr 5 15:30:23 CEST 2017
-#  Revision:   2.0.3
+#  based on this material.                                                    
+#                                                                             
+#  Author:    David Godlove                                                      
+#  Email:     godlovedc@helix.nih.gov                                            
+#  Date:      Fri Sep 23 17:22:25 EDT 2016                                       
+#                                                                            
+#  Last edit: remy <remy.dernat@univ-montp2.fr>                                                           
+#  On Date:   mercredi 5 avril 2017, 16:08:40 (UTC+0200)                                                                   
+#  Revision:  2.0.2                                                           
 # ============================================================================
-
+                                                                              
 AUTH="David Godlove"
 EMAIL="godlovedc@helix.nih.gov"
 AUTH_DATE="Fri Sep 23 17:22:25 EDT 2016"
-COMMIT_AUTH="Remy Dernat <remy.dernat@umontpellier.fr>"
-COMMIT_DATE="Wed Apr 5 15:30:23 CEST 2017"
-REV="2.0.3"
+COMMIT_AUTH="remy <remy.dernat@univ-montp2.fr>"
+COMMIT_DATE="mercredi 5 avril 2017, 16:08:40 (UTC+0200)"
+REV="2.0.2"
 # ~~~~~~~~~~~~~~~~~~~~~~~~ Do not edit above this line.~~~~~~~~~~~~~~~~~~~~~~~
 
 NVID_VER=367.48
