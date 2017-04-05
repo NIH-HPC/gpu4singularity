@@ -1,81 +1,87 @@
 #!/bin/bash
 # ~~~~The following text is automatically generated. Do not edit manually.~~~~
 # ============================================================================
-#                                                                             
-#                            PUBLIC DOMAIN NOTICE                             
-#                     Center for Information Technology (CIT)                 
-#                                                                             
-#  This software/database is a "United States Government Work" under the      
-#  terms of the United States Copyright Act.  It was written as part of       
-#  the author's official duties as a United States Government employee and    
-#  thus cannot be copyrighted.  This software is freely available             
-#  to the public for use.  The Center for Information Technology and the U.S. 
-#  Government have not placed any restriction on its use or reproduction.     
-#                                                                             
-#  Although all reasonable efforts have been taken to ensure the accuracy     
-#  and reliability of the software and data, CIT and the U.S.                 
-#  Government do not and cannot warrant the performance or results that       
-#  may be obtained by using this software or data. CIT and the U.S.           
-#  Government disclaim all warranties, express or implied, including          
-#  warranties of performance, merchantability or fitness for any particular   
-#  purpose.                                                                   
-#                                                                             
+#
+#                            PUBLIC DOMAIN NOTICE
+#                     Center for Information Technology (CIT)
+#
+#  This software/database is a "United States Government Work" under the
+#  terms of the United States Copyright Act.  It was written as part of
+#  the author's official duties as a United States Government employee and
+#  thus cannot be copyrighted.  This software is freely available
+#  to the public for use.  The Center for Information Technology and the U.S.
+#  Government have not placed any restriction on its use or reproduction.
+#
+#  Although all reasonable efforts have been taken to ensure the accuracy
+#  and reliability of the software and data, CIT and the U.S.
+#  Government do not and cannot warrant the performance or results that
+#  may be obtained by using this software or data. CIT and the U.S.
+#  Government disclaim all warranties, express or implied, including
+#  warranties of performance, merchantability or fitness for any particular
+#  purpose.
+#
 #  Please cite the author and the "NIH Biowulf Cluster" in any work or product
-#  based on this material.                                                    
-#                                                                             
-#  Written by: David Godlove                                                      
-#  Email:      godlovedc@helix.nih.gov                                            
-#  Date:       Fri Sep 23 17:22:25 EDT 2016                                       
-#                                                                             
-#  Last edit:  GodloveD <davidgodlove@gmail.com>                                                           
-#  On Date:    Tue Mar 21 20:12:13 EDT 2017                                                                   
-#  Revision:   2.0.2                                                           
+#  based on this material.
+#
+#  Written by: David Godlove
+#  Email:      godlovedc@helix.nih.gov
+#  Date:       Fri Sep 23 17:22:25 EDT 2016
+#
+#  Last edit:  Remy Dernat <remy.dernat@umontpellier.fr>
+#  On Date:    Wed Apr 5 15:30:23 CEST 2017
+#  Revision:   2.0.3
 # ============================================================================
-                                                                              
+
 AUTH="David Godlove"
 EMAIL="godlovedc@helix.nih.gov"
 AUTH_DATE="Fri Sep 23 17:22:25 EDT 2016"
-COMMIT_AUTH="GodloveD <davidgodlove@gmail.com>"
-COMMIT_DATE="Tue Mar 21 20:12:13 EDT 2017"
-REV="2.0.2"
+COMMIT_AUTH="Remy Dernat <remy.dernat@umontpellier.fr>"
+COMMIT_DATE="Wed Apr 5 15:30:23 CEST 2017"
+REV="2.0.3"
 # ~~~~~~~~~~~~~~~~~~~~~~~~ Do not edit above this line.~~~~~~~~~~~~~~~~~~~~~~~
 
 NVID_VER=367.48
 export PERL5LIB=${PERL5LIB}:.
 
 # these can be overridden with user input (below)
-BUILD_DIR=/tmp/CUDA.${NVID_VER}.build
-DRY_RUN=N    
-VERBOSE=N    
+SRC_DIR=/tmp/CUDA.${NVID_VER}
+BUILD_DIR=/tmp/CUDA.${NVID_VER}/build
+DRY_RUN=N
+VERBOSE=N
+EXTRACTED=Y
+RDL=""
 
+FTP="ftp://helix.nih.gov/CUDA"
 
 function _usage {
     me=$(basename $0)
     cat << EOF
 
-    USAGE: $me  [ -h ] [ -b <build_dir> ] [ -v ] [ -n ] [ -d ]
- 
-    DESCRIPTION:  
-        Installs or changes NVIDIA driver, within a Singularity container so 
-        that the container is able to utilize GPU nodes in the NIH HPC Biowulf 
+    USAGE: $me  [ -h ] [ -V <nvidia_version> ] [ -v ] [ -n ] [ -d ] [ -N ] [ -u <full_url> ] [ -r <root_download_dir> ] [ -b <build_dir> ]
+
+    DESCRIPTION:
+        Installs or changes NVIDIA driver, within a Singularity container so
+        that the container is able to utilize GPU nodes in the NIH HPC Biowulf
         cluster.  It does the following:
- 
-        1) Downloads NVIDIA .run, from the NIH HPC ftp site.  (These files are 
-           maintained to be compatible with current software versions on NIH 
+
+        1) Downloads NVIDIA .run, from the NIH HPC ftp site (These files are
+           maintained to be compatible with current software versions on NIH
            HPC GPU nodes.)
+           The downloaded file must match the following name format:
+           NVIDIA-Linux-x86_64-<version>.run
         2) Extracts and copies binaries and creates links.
         3) Sets environment within the container to recognize driver binaries
            at runtime.
- 
-        To use it, shell into an existing Singularity container on your build
-        system and issue the following commands or include them in your .def 
-        file.  
 
-        wget ftp://helix.nih.gov/CUDA/gpu4singularity
+        To use it, shell into an existing Singularity container on your build
+        system and issue the following commands or include them in your .def
+        file.
+
+        wget ${RDL}/gpu4singularity
         chmod 755 gpu4singularity
         ./gpu4singularity <options>
-        rm gpu4singularity 
- 
+        rm gpu4singularity
+
     OPTIONS:
         -h, --help
                 display this help message
@@ -88,20 +94,37 @@ function _usage {
                 echo commands before running them
 
         -n, --dry-run
-                don't actually do anything
+                don\'t actually do anything
+
+        -N, --not-already-extracted
+                NVIDIA run file includes 2 archives. By default, this script
+                considers you already extracted it at least once.
+
+        -u, --full-url
+                The URL to look for the NVIDIA .run file. By default, it will
+                use the one hosted at the NIH HPC ftp site.
+
+        -r, --root-download-link
+                If the full-url is not set, it will try to get the
+                NVIDIA .run file at that Root URL directory,
+                concatenated with the string NVIDIA-Linux-x86_64-<version>.run
+                By default, it will use the file hosted at the NIH HPC ftp site.
+
+        -V, --nvidia-version
+                The version of the nvidia driver
 
         -d, --debug
                 combines verbose and dry-run options
- 
+
     AUTHORS:
         Written by:  ${AUTH}
         Email:       ${EMAIL}
         Date:        ${AUTH_DATE}
- 
+
         Last edit:   ${COMMIT_AUTH}
         On Date:     ${COMMIT_DATE}
         Revision:    ${REV}
- 
+
 EOF
     exit 1
 }
@@ -133,8 +156,8 @@ if [[ $? -ne 4 ]]; then
     exit 1
 fi
 
-SHORT=h,n,v,d,b:
-LONG=help,dry-run,verbose,debug,build-dir:
+SHORT=h,n,v,d,N,u:,r:,V:,b:
+LONG=help,dry-run,verbose,debug,not-already-extracted,full-url:,root-download-link:,nvidia-version:,build-dir:
 
 # -temporarily store output to be able to check for errors
 # -activate advanced mode getopt quoting e.g. via "--options"
@@ -146,13 +169,14 @@ if [[ $? -ne 0 ]]; then
     exit 2
 fi
 # use eval with "$PARSED" to properly handle the quoting
+echo $PARSED
 eval set -- "$PARSED"
 
 # now enjoy the options in order and nicely split until we see --
 while true; do
     case "$1" in
         -h|--help)
-            _usage 
+            _usage
             shift
             ;;
         -n|--dry-run)
@@ -171,6 +195,22 @@ while true; do
             VERBOSE=Y
             shift
             ;;
+        -N|--not-already-extracted)
+            EXTRACTED=N
+            shift
+            ;;
+        -u|--full-url)
+            URL="$2"
+            shift 2
+            ;;
+        -r|--root-download-link)
+            RDL="$2"
+            shift 2
+            ;;
+        -V|--nvidia-version)
+            NVID_VER="$2"
+            shift 2
+            ;;
         -b|--build-dir)
             BUILD_DIR="$2"
             shift 2
@@ -180,7 +220,8 @@ while true; do
             break
             ;;
         *)
-            echo "Programming error"
+            _usage
+            echo "Programming error !! getopt can not parse your options."
             exit 3
             ;;
     esac
@@ -196,7 +237,7 @@ fi
 # Check that container has dependencies
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 _do_or_die "mkdir -p ${BUILD_DIR}"
-_do_or_die "cd ${BUILD_DIR}"
+_do_or_die "cd ${SRC_DIR}"
 
 echo ""
 echo "Looking for dependencies in container..."
@@ -212,11 +253,25 @@ echo ""
 # Download and install libraries and drivers
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # download necessary files into image
-_do_or_die "wget ftp://helix.nih.gov/CUDA/NVIDIA-Linux-x86_64-${NVID_VER}.run"
-_do_or_die "chmod 755 ${BUILD_DIR}/*"
+if [[ -z "$URL" ]];then
+  if [[ -n "$RDL" ]]; then
+    URL=$RDL"/NVIDIA-Linux-x86_64-"$NVID_VER".run"
+  else
+    URL=$FTP"/NVIDIA-Linux-x86_64-"$NVID_VER".run"
+  fi
+fi
 
+_do_or_die "wget ${URL}"
+_do_or_die "chmod 755 ${SRC_DIR}/*"
 # extract nvidia files
-_do_or_die "./NVIDIA-Linux-x86_64-${NVID_VER}.run --extract-only"
+if [[ $EXTRACTED == N ]];then
+  _do_or_die "bash ./NVIDIA-Linux-x86_64-${NVID_VER}.run -extract=${BUILD_DIR}"
+  _do_or_die "${BUILD_DIR}/NVIDIA-Linux-x86_64-${NVID_VER}.run --extract-only"
+else
+  _do_or_die "${SRC_DIR}/NVIDIA-Linux-x86_64-${NVID_VER}.run --extract-only"
+fi
+
+
 
 # make links in nvidia directory
 _do_or_die "cd NVIDIA-Linux-x86_64-${NVID_VER}"
@@ -247,10 +302,11 @@ _do_or_die "mv NVIDIA-Linux-x86_64-${NVID_VER} /usr/local/nvidia"
 
 
 # set up /environment to use nvidia drivers and cuda
+# changing ./tmp to ./tmp_env to avoid any confusion with /tmp
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if [[ $VERBOSE == Y ]]; then
     echo ""
-    echo "Adding environmental variables to ./tmp"
+    echo "Adding environmental variables to ./tmp_env"
 fi
 
 # 1) if placeholder tags don't exist, make them
@@ -260,25 +316,25 @@ if [[ $DRY_RUN == N ]]; then
     findtext=$( grep "${tag1}" /environment )
     if [ -z "${findtext}" ]; then
         cat >> /environment <<END_OF_SCRIPT
-    
+
 ${tag1}
 ${tag2}
-    
+
 END_OF_SCRIPT
     fi
-    
-    # 2) cat /environment (before, in, and after placeholder tags) to ./tmp 
-    grep -B10000 "${tag1}" /environment > tmp
-    cat >> tmp <<END_OF_SCRIPT
-PATH=\$PATH:/usr/local/nvidia:/usr/local/cuda-${CUDA_VER}/bin
+
+    # 2) cat /environment (before, in, and after placeholder tags) to ./tmp
+    grep -B10000 "${tag1}" /environment > tmp_env
+    cat >> tmp_env <<END_OF_SCRIPT
+PATH=\$PATH:/usr/local/nvidia:/usr/local/cuda-${NVID_VER}/bin
 LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/nvidia
-export PATH LD_LIBRARY_PATH 
+export PATH LD_LIBRARY_PATH
 END_OF_SCRIPT
-    grep -A10000 "${tag2}" /environment >> tmp
+    grep -A10000 "${tag2}" /environment >> tmp_env
 fi
 
 # 3) move into place
-_do_or_die "mv ./tmp /environment"
+_do_or_die "mv ./tmp_env /environment"
 
 
 # cleanup
