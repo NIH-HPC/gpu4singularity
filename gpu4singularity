@@ -27,16 +27,16 @@
 #  Email:     godlovedc@helix.nih.gov                                            
 #  Date:      Fri Sep 23 17:22:25 EDT 2016                                       
 #                                                                            
-#  Last edit: remy <remy.dernat@univ-montp2.fr>                                                           
-#  On Date:   mercredi 5 avril 2017, 16:13:29 (UTC+0200)                                                                   
+#  Last edit: remy <remy.dernat@umontpellier.fr>                                                           
+#  On Date:   vendredi 7 avril 2017, 15:12:08 (UTC+0200)                                                                   
 #  Revision:  2.1.0                                                           
 # ============================================================================
                                                                               
 AUTH="David Godlove"
 EMAIL="godlovedc@helix.nih.gov"
 AUTH_DATE="Fri Sep 23 17:22:25 EDT 2016"
-COMMIT_AUTH="remy <remy.dernat@univ-montp2.fr>"
-COMMIT_DATE="mercredi 5 avril 2017, 16:13:29 (UTC+0200)"
+COMMIT_AUTH="remy <remy.dernat@umontpellier.fr>"
+COMMIT_DATE="vendredi 7 avril 2017, 15:12:08 (UTC+0200)"
 REV="2.1.0"
 # ~~~~~~~~~~~~~~~~~~~~~~~~ Do not edit above this line.~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -48,7 +48,7 @@ SRC_DIR=/tmp/CUDA.${NVID_VER}
 BUILD_DIR=/tmp/CUDA.${NVID_VER}/build
 DRY_RUN=N
 VERBOSE=N
-EXTRACTED=Y
+FROM_CUDA=""
 RDL=""
 
 FTP="ftp://helix.nih.gov/CUDA"
@@ -96,9 +96,9 @@ function _usage {
         -n, --dry-run
                 don\'t actually do anything
 
-        -N, --not-already-extracted
-                NVIDIA run file includes 2 archives. By default, this script
-                considers you already extracted it at least once.
+        -c, --from-cuda
+                Extract the nvidia<version>.run file and install drivers 
+                from a cuda<version>.run archive bundle.
 
         -u, --full-url
                 The URL to look for the NVIDIA .run file. By default, it will
@@ -156,8 +156,8 @@ if [[ $? -ne 4 ]]; then
     exit 1
 fi
 
-SHORT=h,n,v,d,N,u:,r:,V:,b:
-LONG=help,dry-run,verbose,debug,not-already-extracted,full-url:,root-download-link:,nvidia-version:,build-dir:
+SHORT=h,n,v,d,c,u:,r:,V:,b:
+LONG=help,dry-run,verbose,debug,from-cuda,full-url:,root-download-link:,nvidia-version:,build-dir:
 
 # -temporarily store output to be able to check for errors
 # -activate advanced mode getopt quoting e.g. via "--options"
@@ -194,8 +194,8 @@ while true; do
             VERBOSE=Y
             shift
             ;;
-        -N|--not-already-extracted)
-            EXTRACTED=N
+        -c|--from-cuda)
+            FROM_CUDA=N
             shift
             ;;
         -u|--full-url)
@@ -263,7 +263,7 @@ fi
 _do_or_die "wget ${URL}"
 _do_or_die "chmod 755 ${SRC_DIR}/*"
 # extract nvidia files
-if [[ $EXTRACTED == N ]];then
+if [[ $FROM_CUDA == N ]];then
   _do_or_die "bash ./NVIDIA-Linux-x86_64-${NVID_VER}.run -extract=${BUILD_DIR}"
   _do_or_die "${BUILD_DIR}/NVIDIA-Linux-x86_64-${NVID_VER}.run --extract-only"
 else
