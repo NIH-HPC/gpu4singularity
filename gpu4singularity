@@ -264,7 +264,7 @@ _do_or_die "wget ${URL}"
 _do_or_die "chmod 755 ${SRC_DIR}/*"
 # extract nvidia files
 if [[ $FROM_CUDA == N ]];then
-  _do_or_die "bash ./NVIDIA-Linux-x86_64-${NVID_VER}.run -extract=${BUILD_DIR}"
+  _do_or_die "bash ./*${NVID_VER}* -extract=${BUILD_DIR}"
   _do_or_die "${BUILD_DIR}/NVIDIA-Linux-x86_64-${NVID_VER}.run --extract-only"
 else
   _do_or_die "${SRC_DIR}/NVIDIA-Linux-x86_64-${NVID_VER}.run --extract-only"
