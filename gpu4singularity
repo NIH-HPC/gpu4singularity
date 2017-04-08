@@ -27,17 +27,17 @@
 #  Email:     godlovedc@helix.nih.gov                                            
 #  Date:      Fri Sep 23 17:22:25 EDT 2016                                       
 #                                                                            
-#  Last edit: remy <remy.dernat@umontpellier.fr>                                                           
-#  On Date:   vendredi 7 avril 2017, 15:12:08 (UTC+0200)                                                                   
-#  Revision:  2.1.0                                                           
+#  Last edit: Ubuntu <ubuntu@ip-172-31-23-144.us-west-2.compute.internal>                                                           
+#  On Date:   Sat Apr  8 04:16:54 UTC 2017                                                                   
+#  Revision:  2.1.1                                                           
 # ============================================================================
                                                                               
 AUTH="David Godlove"
 EMAIL="godlovedc@helix.nih.gov"
 AUTH_DATE="Fri Sep 23 17:22:25 EDT 2016"
-COMMIT_AUTH="remy <remy.dernat@umontpellier.fr>"
-COMMIT_DATE="vendredi 7 avril 2017, 15:12:08 (UTC+0200)"
-REV="2.1.0"
+COMMIT_AUTH="Ubuntu <ubuntu@ip-172-31-23-144.us-west-2.compute.internal>"
+COMMIT_DATE="Sat Apr  8 04:16:54 UTC 2017"
+REV="2.1.1"
 # ~~~~~~~~~~~~~~~~~~~~~~~~ Do not edit above this line.~~~~~~~~~~~~~~~~~~~~~~~
 
 NVID_VER=367.48
