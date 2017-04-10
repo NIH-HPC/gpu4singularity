@@ -1,0 +1,5 @@
+language: generic
+
+script:
+    - ./gpu4singularity -h
+    - ./gpu4singularity --help
