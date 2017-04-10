@@ -44,13 +44,11 @@ NVID_VER=367.48
 export PERL5LIB=${PERL5LIB}:.
 
 # these can be overridden with user input (below)
-SRC_DIR=/tmp/CUDA.${NVID_VER}
-BUILD_DIR=/tmp/CUDA.${NVID_VER}/build
+BUILD_DIR=/tmp/nvidia_driver
 DRY_RUN=N
 VERBOSE=N
 FROM_CUDA=""
 RDL=""
-
 FTP="ftp://helix.nih.gov/CUDA"
 
 function _usage {
@@ -94,7 +92,7 @@ function _usage {
                 echo commands before running them
 
         -n, --dry-run
-                don\'t actually do anything
+                don't actually do anything
 
         -c, --from-cuda
                 Extract the nvidia<version>.run file and install drivers 
@@ -126,7 +124,7 @@ function _usage {
         Revision:    ${REV}
 
 EOF
-    exit 1
+    exit 0
 }
 
 
@@ -139,8 +137,9 @@ function _do_or_die {
         $cmd
     fi
     if [ $? != 0 ]; then
+        rm -rf "${BUILD_DIR}"
         echo "ERROR: could not execute '${cmd}'"
-        echo NVIDIA/CUDA installation failed.
+        echo NVIDIA driver installation failed.
         echo "***ABORTING***"
         exit 1
     fi
@@ -236,7 +235,7 @@ fi
 # Check that container has dependencies
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 _do_or_die "mkdir -p ${BUILD_DIR}"
-_do_or_die "cd ${SRC_DIR}"
+_do_or_die "cd ${BUILD_DIR}"
 
 echo ""
 echo "Looking for dependencies in container..."
@@ -261,16 +260,12 @@ if [[ -z "$URL" ]];then
 fi
 
 _do_or_die "wget ${URL}"
-_do_or_die "chmod 755 ${SRC_DIR}/*"
+_do_or_die "chmod 755 ${BUILD_DIR}/*"
 # extract nvidia files
 if [[ $FROM_CUDA == N ]];then
   _do_or_die "bash ./*${NVID_VER}* -extract=${BUILD_DIR}"
-  _do_or_die "${BUILD_DIR}/NVIDIA-Linux-x86_64-${NVID_VER}.run --extract-only"
-else
-  _do_or_die "${SRC_DIR}/NVIDIA-Linux-x86_64-${NVID_VER}.run --extract-only"
 fi
-
-
+_do_or_die "${BUILD_DIR}/NVIDIA-Linux-x86_64-${NVID_VER}.run --extract-only"
 
 # make links in nvidia directory
 _do_or_die "cd NVIDIA-Linux-x86_64-${NVID_VER}"
