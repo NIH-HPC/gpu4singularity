@@ -27,16 +27,16 @@
 #  Email:     godlovedc@helix.nih.gov                                            
 #  Date:      Fri Sep 23 17:22:25 EDT 2016                                       
 #                                                                            
-#  Last edit: Ubuntu <ubuntu@ip-172-31-23-144.us-west-2.compute.internal>                                                           
-#  On Date:   Sat Apr  8 04:16:54 UTC 2017                                                                   
+#  Last edit: GodloveD <davidgodlove@gmail.com>                                                           
+#  On Date:   Wed, Jun 14, 2017  2:19:57 PM                                                                   
 #  Revision:  2.1.1                                                           
 # ============================================================================
                                                                               
 AUTH="David Godlove"
 EMAIL="godlovedc@helix.nih.gov"
 AUTH_DATE="Fri Sep 23 17:22:25 EDT 2016"
-COMMIT_AUTH="Ubuntu <ubuntu@ip-172-31-23-144.us-west-2.compute.internal>"
-COMMIT_DATE="Sat Apr  8 04:16:54 UTC 2017"
+COMMIT_AUTH="GodloveD <davidgodlove@gmail.com>"
+COMMIT_DATE="Wed, Jun 14, 2017  2:19:57 PM"
 REV="2.1.1"
 # ~~~~~~~~~~~~~~~~~~~~~~~~ Do not edit above this line.~~~~~~~~~~~~~~~~~~~~~~~
 

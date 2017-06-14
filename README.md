@@ -7,6 +7,9 @@
 - [Singularity on Biowulf](http://hpc.nih.gov/apps/singularity)
 
 ## About
+_NOTE: `gpu4singularity` is only compatible with Singularity versions < 2.3.  If 
+you are using singularity >= v2.3, use the experimental option `--nv` to grant
+your containers GPU support at runtime._
 
 [Singularity](http://singularity.lbl.gov) is a container platform that let's 
 you "swap" out your host operating system for one that you control.  
