@@ -8,7 +8,7 @@
 
 ## About
 _NOTE: `gpu4singularity` is only compatible with Singularity versions < 2.3.  If 
-you are using singularity >= v2.3, use the experimental option `--nv` to grant
+you are using Singularity >= 2.3, use the experimental option `--nv` to grant
 your containers GPU support at runtime._
 
 [Singularity](http://singularity.lbl.gov) is a container platform that let's 
