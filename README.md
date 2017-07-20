@@ -7,9 +7,10 @@
 - [Singularity on Biowulf](http://hpc.nih.gov/apps/singularity)
 
 ## About
-_NOTE: `gpu4singularity` is only compatible with Singularity versions < 2.3.  If 
-you are using Singularity >= 2.3, use the experimental option `--nv` to grant
-your containers GPU support at runtime._
+_NOTE: `gpu4singularity` is depricated for most uses (except maybe compiling
+against driver libs at bootstrap and some other weird stuff).  If you are using
+Singularity >= 2.3, use the experimental option `--nv` to grant your containers 
+GPU support at runtime._
 
 [Singularity](http://singularity.lbl.gov) is a container platform that let's 
 you "swap" out your host operating system for one that you control.  
@@ -55,14 +56,17 @@ From: nvidia/cuda:8.0-cudnn5-devel
 
     # add universe repo and install some packages
     sed -i '/xenial.*universe/s/^#//g' /etc/apt/sources.list
-    locale-gen en_US.UTF-8
+    export LANG=C
     apt-get -y update
     apt-get -y install vim wget perl python python-pip python-dev
 
     # download and run NIH HPC NVIDIA driver installer
-    wget gpu4singularity 
+    wget https://raw.githubusercontent.com/NIH-HPC/gpu4singularity/master/gpu4singularity
     chmod u+rwx gpu4singularity
-    ./gpu4singularity --verbose
+    export VERSION=375.66
+    ./gpu4singularity --verbose \
+        -u http://us.download.nvidia.com/XFree86/Linux-x86_64/"${VERSION}"/NVIDIA-Linux-x86_64-"${VERSION}".run \
+        -V "${VERSION}"
     rm gpu4singularity
 
     # install tensorflow
