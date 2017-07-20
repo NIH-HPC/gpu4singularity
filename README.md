@@ -56,14 +56,17 @@ From: nvidia/cuda:8.0-cudnn5-devel
 
     # add universe repo and install some packages
     sed -i '/xenial.*universe/s/^#//g' /etc/apt/sources.list
-    locale-gen en_US.UTF-8
+    export LANG=C
     apt-get -y update
     apt-get -y install vim wget perl python python-pip python-dev
 
     # download and run NIH HPC NVIDIA driver installer
-    wget gpu4singularity 
+    wget https://raw.githubusercontent.com/NIH-HPC/gpu4singularity/master/gpu4singularity
     chmod u+rwx gpu4singularity
-    ./gpu4singularity --verbose
+    export VERSION=375.66
+    ./gpu4singularity --verbose \
+        -u http://us.download.nvidia.com/XFree86/Linux-x86_64/"${VERSION}"/NVIDIA-Linux-x86_64-"${VERSION}".run \
+        -V "${VERSION}"
     rm gpu4singularity
 
     # install tensorflow
