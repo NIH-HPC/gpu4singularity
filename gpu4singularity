@@ -28,16 +28,16 @@
 #  Date:      Fri Sep 23 17:22:25 EDT 2016                                       
 #                                                                            
 #  Last edit: GodloveD <davidgodlove@gmail.com>                                                           
-#  On Date:   Wed, Jun 14, 2017  2:19:57 PM                                                                   
-#  Revision:  2.1.1                                                           
+#  On Date:   Thu Jul 20 17:08:48 UTC 2017                                                                   
+#  Revision:  2.2.1                                                           
 # ============================================================================
                                                                               
 AUTH="David Godlove"
 EMAIL="godlovedc@helix.nih.gov"
 AUTH_DATE="Fri Sep 23 17:22:25 EDT 2016"
 COMMIT_AUTH="GodloveD <davidgodlove@gmail.com>"
-COMMIT_DATE="Wed, Jun 14, 2017  2:19:57 PM"
-REV="2.1.1"
+COMMIT_DATE="Thu Jul 20 17:08:48 UTC 2017"
+REV="2.2.1"
 # ~~~~~~~~~~~~~~~~~~~~~~~~ Do not edit above this line.~~~~~~~~~~~~~~~~~~~~~~~
 
 NVID_VER=367.48
@@ -298,6 +298,12 @@ _do_or_die "mv NVIDIA-Linux-x86_64-${NVID_VER} /usr/local/nvidia"
 # set up /environment to use nvidia drivers and cuda
 # changing ./tmp to ./tmp_env to avoid any confusion with /tmp
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if [ -d /.singularity.d ]; then 
+    ENV_FILE="/.singularity.d/env/95-nvidia.sh"
+else
+    ENV_FILE="/environment"
+fi
+    
 if [[ $VERBOSE == Y ]]; then
     echo ""
     echo "Adding environmental variables to ./tmp_env"
@@ -307,9 +313,9 @@ fi
 if [[ $DRY_RUN == N ]]; then
     tag1='### START NVIDIA PATHS'
     tag2='### END NVIDIA PATHS'
-    findtext=$( grep "${tag1}" /environment )
+    findtext=$( grep "${tag1}" "${ENV_FILE}" )
     if [ -z "${findtext}" ]; then
-        cat >> /environment <<END_OF_SCRIPT
+        cat >> "${ENV_FILE}" <<END_OF_SCRIPT
 
 ${tag1}
 ${tag2}
@@ -317,18 +323,18 @@ ${tag2}
 END_OF_SCRIPT
     fi
 
-    # 2) cat /environment (before, in, and after placeholder tags) to ./tmp
-    grep -B10000 "${tag1}" /environment > tmp_env
+    # 2) cat environment (before, in, and after placeholder tags) to ./tmp
+    grep -B10000 "${tag1}" "${ENV_FILE}" > tmp_env
     cat >> tmp_env <<END_OF_SCRIPT
 PATH=\$PATH:/usr/local/nvidia:/usr/local/cuda-${NVID_VER}/bin
 LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/nvidia
 export PATH LD_LIBRARY_PATH
 END_OF_SCRIPT
-    grep -A10000 "${tag2}" /environment >> tmp_env
+    grep -A10000 "${tag2}" "${ENV_FILE}" >> tmp_env
 fi
 
 # 3) move into place
-_do_or_die "mv ./tmp_env /environment"
+_do_or_die "mv ./tmp_env "${ENV_FILE}""
 
 
 # cleanup
